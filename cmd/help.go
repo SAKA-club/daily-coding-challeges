@@ -2,39 +2,38 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 	"sort"
 )
 
 type CmdOption interface {
 	Name() string
 	Description() string
-	Invoke([]string)
+	Invoke([]string) (bool, error)
 }
 
-type HelpCmd struct {
+type Help struct {
 	cmdOpts map[string]CmdOption
 }
 
-func NewHelpCmd(opts map[string]CmdOption) *HelpCmd {
-	return &HelpCmd{
+func NewHelp(opts map[string]CmdOption) *Help {
+	return &Help{
 		cmdOpts: opts,
 	}
 }
 
-func (h HelpCmd) Name() string {
+func (h Help) Name() string {
 	return "help"
 }
 
-func (h HelpCmd) Description() string {
+func (h Help) Description() string {
 	return "prints all available commands"
 }
 
-func (h HelpCmd) Invoke(args []string) {
+func (h Help) Invoke(args []string) (bool, error) {
 	var err string
-	if len(args) <= 1 {
+	if len(args) < 1 {
 		err = "no command provided"
-	} else if cmd, allowed := h.cmdOpts[os.Args[1]]; !allowed {
+	} else if cmd, allowed := h.cmdOpts[args[0]]; !allowed {
 		err = fmt.Sprintf("%v: no command found", cmd)
 	}
 
@@ -56,4 +55,6 @@ func (h HelpCmd) Invoke(args []string) {
 		}
 		println(fmt.Sprintf("    %-10s: %v", cmd, desc))
 	}
+
+	return false, nil
 }
