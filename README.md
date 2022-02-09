@@ -18,5 +18,5 @@ Fine tune your skills by completing daily coding challenges
     ```
 - Test your solution
     ```
-    go run main.go test
+    go run main.go validate
     ```
