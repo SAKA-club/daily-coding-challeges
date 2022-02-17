@@ -1,5 +1,5 @@
 package _01_02_2022
 
-func spencerreeves() {
+func Spencerreeves() {
 
 }
