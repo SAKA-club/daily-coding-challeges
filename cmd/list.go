@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"strings"
 	"time"
+
+	markdown "github.com/MichaelMure/go-term-markdown"
 )
 
 const TimeLayout = "02-01-2006"
@@ -55,8 +57,12 @@ func (l List) Invoke(args []string) (exit bool, err error) {
 	if err != nil {
 		return false, errors.New(noProbErr(date, path))
 	} else {
-		println("File exists: ")
-		println(path)
+		readme, err := render(path)
+		if err != nil {
+			return false, err
+		}
+
+		println(fmt.Sprintf("%s", readme))
 	}
 
 	return false, nil
@@ -67,4 +73,11 @@ func noProbErr(date time.Time, path string) string {
 	return fmt.Sprintf("The problem for %s isn't posted yet or your local repo is out of date:\n\tPath: %s", formattedDate, path)
 }
 
-func 
+func render(path string) ([]byte, error) {
+	source, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, errors.New(fmt.Sprintf("Unable to read file at %s", path))
+	}
+
+	return markdown.Render(string(source), 80, 6), nil
+}
