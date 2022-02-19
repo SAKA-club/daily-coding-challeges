@@ -23,7 +23,7 @@ func (l List) Name() string {
 }
 
 func (l List) Description() string {
-	return "Prints out the prompt for the challenge of the day"
+	return "prints out the prompt for the challenge of the day"
 }
 
 func (l List) Options() map[string]string {
@@ -32,30 +32,18 @@ func (l List) Options() map[string]string {
 	}
 }
 
-func (l List) Invoke(args []string) (exit bool, err error) {
+func (l List) Invoke(args []string) (bool, error) {
 	// remove first arg (list) from args list
 	args = args[1:]
-	date := time.Now()
-
-	if len(args) > 0 {
-		if len(args) != 2 {
-			return false, errors.New(fmt.Sprintf("invalid number of arguments for `list`: %d", len(args)))
-		}
-
-		if args[0] != "-d" {
-			return false, errors.New(fmt.Sprintf("invalid option for `list` command: %s", args[0]))
-		}
-
-		date, err = time.Parse(TimeLayout, args[1])
-		if err != nil {
-			return false, errors.New(fmt.Sprintf("invalid date: %s", args[1]))
-		}
+	date, err := ParseDate(args)
+	if err != nil {
+		return false, err
 	}
 
 	path := fmt.Sprintf("problems/%d/%s/%02d/README.md", date.Year(), strings.ToLower(date.Month().String()), date.Day())
 	_, err = ioutil.ReadFile(path)
 	if err != nil {
-		return false, errors.New(noProbErr(date, path))
+		return false, errors.New(noProbErr(*date, path))
 	} else {
 		readme, err := render(path)
 		if err != nil {

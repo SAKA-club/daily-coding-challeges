@@ -22,3 +22,6 @@ go.work
 
 # Intellij
 *.idea
+
+# Solution files
+**/solutions
