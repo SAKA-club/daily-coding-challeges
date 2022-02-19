@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"club.saka/daily-coding-challeges/cmd"
 	"fmt"
+	viper "github.com/spf13/viper"
 	"io/ioutil"
 	"os"
 	"sort"
@@ -21,10 +22,16 @@ func main() {
 	title, _ := ioutil.ReadFile("copy/daily_coding_challenge_ascii_art.txt")
 	fmt.Println(string(title) + "\n")
 
+	viper.SetConfigFile(".env")
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic(fmt.Errorf("Fatal error config file: %w \n", err))
+	}
+
 	cmds := map[string]Command{
 		"exit":     cmd.NewExit(),
 		"help":     cmd.NewHelp(),
-		"init":     nil,
+		"init":     cmd.NewInit(viper.GetString("USERNAME")),
 		"list":     cmd.NewList(),
 		"validate": nil,
 		"stats":    nil,

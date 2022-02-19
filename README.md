@@ -3,6 +3,7 @@ Fine tune your skills by completing daily coding challenges
 
 ## Upcoming Features
 - [ ] Slack integration
+- [ ] Workflow to check that solution is by correct person (github handle). No other changes are made like to the env file, template,  etc.
 
 ## Prerequisites
 1. Set your GH username in the `.env` file
