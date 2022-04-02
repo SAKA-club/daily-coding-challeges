@@ -1,0 +1,39 @@
+{
+  "Example test": {
+    "inputs": {
+      "test_1": {
+        "s1": "abcdef",
+        "s2": "fedcba"
+      },
+      "test_2": {
+        "s1": "aabebaa",
+        "s2": "aabcbaa"
+      }
+    },
+    "outputs": {
+      "test_1": true,
+      "test_2": false
+    }
+  },
+  "Length test": {
+    "inputs": {
+      "test_1": {
+        "s1": "a",
+        "s2": "aa"
+      },
+      "test_2": {
+        "s1": "aa",
+        "s2": "a"
+      },
+      "test_3": {
+        "s1": "",
+        "s2": ""
+      }
+    },
+    "outputs": {
+      "test_1": false,
+      "test_2": false,
+      "test_3": true
+    }
+  }
+}

@@ -1,0 +1,90 @@
+package main
+
+import (
+	"club.saka/daily-coding-challeges/common"
+	"context"
+	"errors"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
+	"path"
+	"time"
+)
+
+// IsPermutation returns whether s1 and s2 are permutations of each other by creating a reference map.
+func IsPermutation(s1 string, s2 string) bool {
+    // TODO: Implement
+	return false
+}
+
+/* DO NOT EDIT THE FOLLOWING */
+
+const year, month, day = "2022", "april", "02"
+const testInputPath = "test_inputs.json"
+
+type TestInput04022022 struct {
+	S1 string `json:"s1"`
+	S2 string `json:"s2"`
+}
+
+type Test struct {
+	Inputs  map[string]TestInput04022022 `json:"inputs"`
+	Outputs map[string]bool              `json:"outputs"`
+}
+
+type Problem struct {
+	tests  *map[string]Test
+	logger *zerolog.Logger
+}
+
+func New(pwd string, logger *zerolog.Logger) *Problem {
+	if pwd == "" {
+		pwd = path.Join("problems", year, month, day, testInputPath)
+	}
+
+	if logger == nil {
+		ll := log.With().Str("pwd", pwd).Logger()
+		logger = &ll
+	}
+
+	tests := map[string]Test{}
+	err := common.ImportTestData(pwd, &tests)
+	if tests == nil || err != nil {
+		log.Log().Err(err).Msg("no test data")
+	}
+
+	return &Problem{
+		tests:  &tests,
+		logger: logger,
+	}
+}
+
+func (p Problem) RunTests(ctx context.Context, tests interface{}) (*common.TestHarness, error) {
+	if tests == nil {
+		return nil, errors.New("no test data")
+	}
+
+	harness := common.TestHarness{
+		Total: len(*p.tests),
+	}
+
+	harness.Start = time.Now()
+	for title, t := range *p.tests {
+		for header, in := range t.Inputs {
+			ll := p.logger.With().Str("test", title).Str("subtest", header).Interface("input", in).Logger()
+			expected := t.Outputs[header]
+			output := IsPermutation(in.S1, in.S2)
+
+			if expected != output {
+				harness.Failed += 1
+				ll.Error().Interface("expected_output", expected).Interface("output", output).Msg("output mismatch")
+				break
+			}
+
+			ll.Debug().Interface("output", output).Msg("Success")
+			harness.Passed += 1
+		}
+	}
+
+	harness.End = time.Now()
+	return &harness, nil
+}

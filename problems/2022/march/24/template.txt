@@ -1,0 +1,21 @@
+package main
+
+// IsUnique verifies there are no duplicate characters in a string.
+// What is the runtime complexity? How much additional memory is used?
+func IsUnique(input string) bool {
+    return false
+}
+
+// IsUnique2 verifies there are no duplicate characters in a string.
+// What is the runtime complexity? How much additional memory is used?
+func IsUnique2(input string) bool {
+    return false
+}
+
+func main() {
+	println(IsUnique("abcedf"))
+	println(IsUnique("cdefc"))
+
+	println(IsUnique2("abcedf"))
+	println(IsUnique2("cdefc"))
+}
