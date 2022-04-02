@@ -1,15 +1,20 @@
 package cmd
 
 import (
+	"club.saka/daily-coding-challeges/common"
 	"errors"
 	"fmt"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path"
 	"plugin"
 	"strings"
-	"time"
 )
+
+const testInputPath = "test_inputs.json"
 
 type Test struct {
 	username string
@@ -90,20 +95,21 @@ func runTests(basePath string, username string) error {
 		return errors.New(fmt.Sprintf("test plugin could not be opened: %s", err.Error()))
 	}
 
-	testCount, err := testPlugin.Lookup("TestCount")
+	newFn, err := testPlugin.Lookup("New")
 	if err != nil {
-		return errors.New(fmt.Sprintf("test plugin constant TestCount could not be found: %s", err.Error()))
+		return errors.New(fmt.Sprintf("test plugin function `New` could not be found: %s", err.Error()))
 	}
 
-	testRunner, err := testPlugin.Lookup("TestRunner")
-	if err != nil {
-		return errors.New(fmt.Sprintf("test plugin constant TestRunner could not be found: %s", err.Error()))
+	pwd := path.Join(basePath, testInputPath)
+	logger := log.With().Str("pwd", pwd).Logger()
+
+	problem := newFn.(func(pwd string, logger *zerolog.Logger) *common.Problem)(pwd, &logger)
+	if problem == nil {
+		return err
 	}
 
-	start := time.Now()
-	println(fmt.Sprintf("Executing %v tests...", *testCount.(*int)))
-	testRunner.(func())()
-	println(fmt.Sprintf("Execution time: %v seconds", time.Now().Sub(start).Seconds()))
+	harness, err := (*problem).RunTests()
+	logger.Info().Int("passed", harness.Passed).Int("failed", harness.Failed).Dur("duration", harness.End.Sub(harness.Start))
 
 	return nil
 }
