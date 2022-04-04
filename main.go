@@ -28,13 +28,15 @@ func main() {
 		panic(fmt.Errorf("Fatal error config file: %w \n", err))
 	}
 
+	username := viper.GetString("USERNAME")
+
 	cmds := map[string]Command{
-		"exit":     cmd.NewExit(),
-		"help":     cmd.NewHelp(),
-		"init":     cmd.NewInit(viper.GetString("USERNAME")),
-		"list":     cmd.NewList(),
-		"validate": nil,
-		"stats":    nil,
+		"exit":  cmd.NewExit(),
+		"help":  cmd.NewHelp(),
+		"init":  cmd.NewInit(username),
+		"list":  cmd.NewList(),
+		"test":  cmd.NewTest(username),
+		"stats": nil,
 	}
 
 	execute(cmds)

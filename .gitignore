@@ -25,3 +25,6 @@ go.work
 
 # Solution files
 **/solutions
+
+# Env variables
+.env

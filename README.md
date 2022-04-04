@@ -6,18 +6,21 @@ Fine tune your skills by completing daily coding challenges
 - [ ] Workflow to check that solution is by correct person (github handle). No other changes are made like to the env file, template,  etc.
 
 ## Prerequisites
-1. Set your GH username in the `.env` file
+- Set your GH username in the `.env` file
+   ```shell
+   USERNAME=<GITHUB USERNAME>
+   ```
 
 ## Complete challenges
 - Read the challenge for the day
-    ```
-    go run main.go challenge
+    ```shell
+    go run main.go list
     ```
 - Init the file for your solution. Creates a file under `<month>/<day>/<github-username>.go` with the template for your function.
-    ```
+    ```shell
     go run main.go init
     ```
 - Test your solution
-    ```
-    go run main.go validate
+    ```shell
+    go run main.go test
     ```
