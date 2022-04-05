@@ -1,0 +1,75 @@
+package main
+
+import (
+	"club.saka/daily-coding-challeges/common"
+	"errors"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
+	"strings"
+	"time"
+)
+
+// URLify returns a string will spaces replaced with %20. Runtime complexity with be O(n). Memory usage will be O(n)
+func URLify(s string) string {
+	return ""
+}
+
+/* DO NOT EDIT THE FOLLOWING */
+
+type TestInput struct {
+	S string `json:"s"`
+}
+
+type Test struct {
+	Inputs  map[string]TestInput `json:"inputs"`
+	Outputs map[string]string      `json:"outputs"`
+}
+
+type Problem struct {
+	tests  *map[string]Test
+	logger *zerolog.Logger
+}
+
+func New(pwd string, logger *zerolog.Logger) *Problem {
+	tests := map[string]Test{}
+	err := common.ImportTestData(pwd, &tests)
+	if tests == nil || err != nil {
+		log.Log().Err(err).Msg("no test data")
+	}
+
+	return &Problem{
+		tests:  &tests,
+		logger: logger,
+	}
+}
+
+func (p Problem) RunTests() (*common.TestHarness, error) {
+	if p.tests == nil {
+		return nil, errors.New("no test data")
+	}
+
+	harness := common.TestHarness{
+		Total: len(*p.tests),
+	}
+
+	harness.Start = time.Now()
+	for title, t := range *p.tests {
+		for header, in := range t.Inputs {
+			ll := p.logger.With().Str("test", title).Str("subtest", header).Interface("input", in).Logger()
+			expected := t.Outputs[header]
+			output := URLify(in.S)
+
+			if expected != output {
+				harness.Failed += 1
+				ll.Error().Interface("expected_output", expected).Interface("output", output).Msg("output mismatch")
+				break
+			}
+
+			ll.Debug().Interface("output", output).Msg("Success")
+			harness.Passed += 1
+		}
+	}
+
+	harness.End = time.Now()
+	return &harness, nil
+}

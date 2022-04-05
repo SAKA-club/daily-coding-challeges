@@ -1,0 +1,16 @@
+{
+  "Example test": {
+    "inputs": {
+      "test_1": {
+        "s": " "
+      },
+      "test_2": {
+        "s": "Mr John Smith"
+      }
+    },
+    "outputs": {
+      "test_1": "%20",
+      "test_2": "Mr%20John%20Smith"
+    }
+  }
+}
