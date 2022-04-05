@@ -7,6 +7,8 @@ import (
 	"html/template"
 	"io/ioutil"
 	"os"
+	"path"
+	"strconv"
 	"strings"
 )
 
@@ -48,8 +50,8 @@ func (i Init) Invoke(args []string) (bool, error) {
 		return false, errors.New(fmt.Sprintf("invalid date provided: %v", *date))
 	}
 
-	templatePath := fmt.Sprintf("problems/%d/%s/%02d/template.txt", date.Year(), strings.ToLower(date.Month().String()), date.Day())
-	solutionPath := fmt.Sprintf("problems/%d/%s/%02d/solutions/%s.go", date.Year(), strings.ToLower(date.Month().String()), date.Day(), i.username)
+	templatePath := path.Join("problems", strconv.Itoa(date.Year()), strings.ToLower(date.Month().String()), fmt.Sprintf("%02d", date.Day()))
+	solutionPath := path.Join(templatePath, "solutions", i.username+".go")
 	_, err = ioutil.ReadFile(solutionPath)
 	if err == nil {
 		return false, errors.New(fmt.Sprintf("solution file already exists: %s", solutionPath))
