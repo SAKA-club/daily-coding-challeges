@@ -1,0 +1,12 @@
+{
+  "Example test": {
+    "inputs": {
+      "test_1": {
+        "s": "Tact Coa"
+      }
+    },
+    "outputs": {
+      "test_1": true
+    }
+  }
+}

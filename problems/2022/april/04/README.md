@@ -5,6 +5,6 @@
 
 
 ```
-URLify(" ", "%20") // should return true
-URLify("Mr John Smith", "Mr%20John%20Smith") // should return false
+URLify(" ") // should return "%20"
+URLify("Mr John Smith") // should return "Mr%20John%20Smith"
 ```

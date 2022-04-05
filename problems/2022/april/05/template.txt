@@ -5,13 +5,12 @@ import (
 	"errors"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"strings"
 	"time"
 )
 
-// URLify replaces spaces with %20 in a string
-func URLify(s string) string {
-	return ""
+// PalindromePermutation checks if it is a permutation of a palindrome
+func PalindromePermutation(s string) bool {
+	return false
 }
 
 /* DO NOT EDIT THE FOLLOWING */
@@ -22,7 +21,7 @@ type TestInput struct {
 
 type Test struct {
 	Inputs  map[string]TestInput `json:"inputs"`
-	Outputs map[string]string      `json:"outputs"`
+	Outputs map[string]bool      `json:"outputs"`
 }
 
 type Problem struct {
@@ -57,7 +56,7 @@ func (p Problem) RunTests() (*common.TestHarness, error) {
 		for header, in := range t.Inputs {
 			ll := p.logger.With().Str("test", title).Str("subtest", header).Interface("input", in).Logger()
 			expected := t.Outputs[header]
-			output := URLify(in.S)
+			output := PalindromePermutation(in.S)
 
 			if expected != output {
 				harness.Failed += 1
