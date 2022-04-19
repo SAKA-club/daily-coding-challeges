@@ -1,0 +1,23 @@
+{
+  "Example tests": {
+    "inputs": {
+      "test_1": {
+        "s1": "taco",
+        "s2": "cat"
+      },
+      "test_2": {
+        "s1": "blue",
+        "s2": "green"
+      },
+      "test_3": {
+        "s1": "Mate",
+        "s2": "Bate"
+      }
+    },
+    "outputs": {
+      "test_1": true,
+      "test_2": false,
+      "test_3": false
+    }
+  }
+}
