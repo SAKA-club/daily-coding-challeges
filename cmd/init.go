@@ -50,22 +50,22 @@ func (i Init) Invoke(args []string) (bool, error) {
 		return false, errors.New(fmt.Sprintf("invalid date provided: %v", *date))
 	}
 
-	templatePath := path.Join("problems", strconv.Itoa(date.Year()), strings.ToLower(date.Month().String()), fmt.Sprintf("%02d", date.Day()))
-	solutionPath := path.Join(templatePath, "solutions", i.username+".go")
+	problemDir := path.Join("problems", strconv.Itoa(date.Year()), strings.ToLower(date.Month().String()), fmt.Sprintf("%02d", date.Day()))
+	solutionPath := path.Join(problemDir, "solutions", i.username+".go")
 	_, err = ioutil.ReadFile(solutionPath)
 	if err == nil {
 		return false, errors.New(fmt.Sprintf("solution file already exists: %s", solutionPath))
 	}
 
-	err = createTemplate(templatePath, solutionPath)
+	err = createTemplate(problemDir, solutionPath)
 
 	return false, err
 }
 
-func createTemplate(templatePath string, solution string) error {
-	templateData, err := ioutil.ReadFile(templatePath)
+func createTemplate(problemDir string, solution string) error {
+	templateData, err := ioutil.ReadFile(path.Join(problemDir, "template.txt"))
 	if err != nil {
-		return errors.New(fmt.Sprintf("template does not exist: %s", templatePath))
+		return errors.New(fmt.Sprintf("template file does not exist: %s", path.Join(problemDir, "template.txt")))
 	}
 
 	ut, err := template.New(solution).Parse(string(templateData))
