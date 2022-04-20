@@ -1,0 +1,20 @@
+{
+  "Example tests": {
+    "inputs": {
+      "test_1": {
+        "s": "aabcccccaaa"
+      },
+      "test_2": {
+        "s": "abc"
+      },
+      "test_3": {
+        "s": "aaaaa"
+      }
+    },
+    "outputs": {
+      "test_1": "a2b1c5a3",
+      "test_2": "abc",
+      "test_3": "a5"
+    }
+  }
+}
