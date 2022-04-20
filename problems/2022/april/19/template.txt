@@ -30,17 +30,20 @@ type Problem struct {
 	logger *zerolog.Logger
 }
 
-func New(pwd string, logger *zerolog.Logger) *Problem {
+func New(pwd string, logger *zerolog.Logger) *common.Problem {
 	tests := map[string]Test{}
 	err := common.ImportTestData(pwd, &tests)
 	if tests == nil || err != nil {
 		log.Log().Err(err).Msg("no test data")
 	}
 
-	return &Problem{
+	var p common.Problem
+	p = Problem{
 		tests:  &tests,
 		logger: logger,
 	}
+
+	return &p
 }
 
 func (p Problem) RunTests() (*common.TestHarness, error) {

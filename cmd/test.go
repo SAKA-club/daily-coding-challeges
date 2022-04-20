@@ -62,35 +62,33 @@ func (t Test) Invoke(args []string) (bool, error) {
 }
 
 func runTests(basePath string, username string) error {
-	solutionPath := fmt.Sprintf("%s/solutions/%s.go", basePath, username)
+	solutionPath := path.Join(basePath, "solutions", username+".go")
+	pluginPath := path.Join(basePath, "solutions", fmt.Sprintf("%s_test.so", username))
 	_, err := ioutil.ReadFile(solutionPath)
 	if err != nil {
 		return errors.New(fmt.Sprintf("solution file does not exists: %s", solutionPath))
 	}
 
-	println(fmt.Sprintf("Running tests for %s", solutionPath))
-
-	// Build the test plugin if it hasn't been built yet
-	testPluginPath := basePath + "/test.so"
-	_, err = ioutil.ReadFile(testPluginPath)
-	if err != nil {
-		for _, s := range os.Environ() {
-			println(s)
-		}
-
-		// TODO: Add additional args based on XPC_SERVICE_NAME
-		cmd := exec.Command("go", "build", "-buildmode=plugin", "-o", testPluginPath, basePath+"/test.go")
-		if err = cmd.Run(); err != nil {
-			return errors.New(fmt.Sprintf("test plugin could not be compiled: %s", err.Error()))
-		}
-
-		_, err = ioutil.ReadFile(testPluginPath)
-		if err != nil {
-			return errors.New(fmt.Sprintf("test plugin could not be found: %s", err.Error()))
-		}
+	// Remove old plugin
+	err = os.Remove(pluginPath)
+	if !os.IsNotExist(err) {
+		return err
 	}
 
-	testPlugin, err := plugin.Open(testPluginPath)
+	// TODO - BUG
+	// The problem as I see it is that we are using the command line to build the plugin and then trying to run the
+	// plugin from inside this program. We can't guarantee that these will work unless we can freeze the build falgs.
+	// This works if we just run the program, but will fail if we try to debug the program.
+	cmd := exec.Command("go", "build", "-buildmode=plugin", "-o", pluginPath, solutionPath)
+	if err = cmd.Run(); err != nil {
+		return errors.New(fmt.Sprintf("test plugin could not be compiled: %s", err.Error()))
+	}
+	_, err = ioutil.ReadFile(pluginPath)
+	if err != nil {
+		return errors.New(fmt.Sprintf("test plugin could not be found: %s", err.Error()))
+	}
+
+	testPlugin, err := plugin.Open(pluginPath)
 	if err != nil {
 		return errors.New(fmt.Sprintf("test plugin could not be opened: %s", err.Error()))
 	}
@@ -105,11 +103,11 @@ func runTests(basePath string, username string) error {
 
 	problem := newFn.(func(pwd string, logger *zerolog.Logger) *common.Problem)(pwd, &logger)
 	if problem == nil {
-		return err
+		return errors.New("test plugin function could not be instantiated")
 	}
 
 	harness, err := (*problem).RunTests()
-	logger.Info().Int("passed", harness.Passed).Int("failed", harness.Failed).Dur("duration", harness.End.Sub(harness.Start))
+	logger.Info().Int("passed", harness.Passed).Int("failed", harness.Failed).Dur("duration", harness.End.Sub(harness.Start)).Send()
 
 	return nil
 }
