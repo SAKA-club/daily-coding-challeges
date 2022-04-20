@@ -8,5 +8,5 @@ one edit (or zero edits) awav.
 ```
 OneAway("taco", "cat") // should return true
 OneAway("blue", "green") // should return false
-OneAway("Mate", "Bate") // should return fasle
+OneAway("Funk", "PunK") // should return fasle
 ```
