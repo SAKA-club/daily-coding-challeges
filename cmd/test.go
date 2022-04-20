@@ -71,7 +71,7 @@ func runTests(basePath string, username string) error {
 
 	// Remove old plugin
 	err = os.Remove(pluginPath)
-	if !os.IsNotExist(err) {
+	if err != nil && !os.IsNotExist(err) {
 		return err
 	}
 

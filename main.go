@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"club.saka/daily-coding-challeges/cmd"
 	"fmt"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	viper "github.com/spf13/viper"
 	"io/ioutil"
 	"os"
@@ -29,6 +31,8 @@ func main() {
 	}
 
 	username := viper.GetString("USERNAME")
+
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 
 	cmds := map[string]Command{
 		"exit":  cmd.NewExit(),
