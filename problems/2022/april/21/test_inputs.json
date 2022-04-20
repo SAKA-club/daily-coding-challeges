@@ -1,0 +1,28 @@
+{
+  "Example tests": {
+    "inputs": {
+      "test_1": {
+        "pic": "abcd",
+        "clockwise": true
+      },
+      "test_2": {
+        "pic": "abcd",
+        "clockwise": false
+      },
+      "test_3": {
+        "pic": "abcd",
+        "clockwise": true
+      },
+      "test_4": {
+        "pic": "abcd",
+        "clockwise": true
+      }
+    },
+    "outputs": {
+      "test_1": "cadb",
+      "test_2": "bdac",
+      "test_3": "ccccaaaaddddbbbb",
+      "test_4": "bbbbddddaaaacccc"
+    }
+  }
+}
