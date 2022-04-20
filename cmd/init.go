@@ -73,6 +73,16 @@ func createTemplate(problemDir string, solution string) error {
 		return errors.New(fmt.Sprintf("error parsing template: %s", err.Error()))
 	}
 
+	solutionDir := path.Join(problemDir, "solutions")
+	if _, err = os.Stat(solutionDir); err != nil {
+		if os.IsNotExist(err) {
+			err = os.Mkdir(solutionDir, 0755)
+		}
+	}
+	if err != nil {
+		return errors.New(fmt.Sprintf("failed to create or access solutions directory: %s", solutionDir))
+	}
+
 	f, err := os.Create(solution)
 	if err != nil {
 		return errors.New(fmt.Sprintf("error creating solution file: %s", err.Error()))
