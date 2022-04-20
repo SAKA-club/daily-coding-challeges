@@ -8,21 +8,20 @@ import (
 	"time"
 )
 
-// OneAway checks if it is a permutation of a palindrome
-func OneAway(s1 string, s2 string) bool {
-	return false
+// StringCompression perform basic string compression using the counts of repeated characters
+func StringCompression(s string) string {
+	return ""
 }
 
 /* DO NOT EDIT THE FOLLOWING */
 
 type TestInput struct {
-	S1 string `json:"s1"`
-	S2 string `json:"s2"`
+	S string `json:"s"`
 }
 
 type Test struct {
 	Inputs  map[string]TestInput `json:"inputs"`
-	Outputs map[string]bool      `json:"outputs"`
+	Outputs map[string]string    `json:"outputs"`
 }
 
 type Problem struct {
@@ -60,7 +59,7 @@ func (p Problem) RunTests() (*common.TestHarness, error) {
 		for header, in := range t.Inputs {
 			ll := p.logger.With().Str("test", title).Str("subtest", header).Interface("input", in).Logger()
 			expected := t.Outputs[header]
-			output := OneAway(in.S1, in.S2)
+			output := StringCompression(in.S)
 
 			if expected != output {
 				harness.Failed += 1
