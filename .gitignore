@@ -23,8 +23,5 @@ go.work
 # Intellij
 *.idea
 
-# Solution files
-**/solutions
-
 # Env variables
 .env
